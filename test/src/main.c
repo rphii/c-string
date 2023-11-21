@@ -20,7 +20,7 @@ void test_basics(void) {
     TEST_ASSERT_EQUAL(0, str_push_back(&string, 'a'));
 
     TEST_ASSERT_EQUAL(1, str_length(&string));
-    for(size_t i = 0; i < VEC_DEFAULT_SIZE * 2; i++) {
+    for(size_t i = 0; i < STR_DEFAULT_SIZE * 2; i++) {
         TEST_ASSERT_EQUAL(0, str_push_back(&string, 'a'));
         TEST_ASSERT_GREATER_THAN(str_length(&string), string.cap);
     }
