@@ -1,0 +1,10 @@
+*.exe
+obj/*
+bin
+*.stackdump
+*.o
+*.d
+tags
+*.swp
+*.vim
+
