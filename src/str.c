@@ -5,14 +5,13 @@
 /* inclusion and configuration of vector */
 #include "str.h"
 
+#define VEC_SETTINGS_DEFAULT_SIZE STR_DEFAULT_SIZE
 #define VEC_SETTINGS_KEEP_ZERO_END 1
 #define VEC_SETTINGS_STRUCT_ITEMS s
 
 VEC_IMPLEMENT(Str, str, char, BY_VAL, 0);
 
 /* other functions */
-
-#define STR_DEFAULT_BLOCKSIZE   32
 
 #if 1
 int str_fmt(Str *str, char *format, ...)
@@ -28,18 +27,9 @@ int str_fmt(Str *str, char *format, ...)
     }
     va_end(argp);
     // calculate required memory
-    size_t len_new = str->last + len_app + 1;
-    size_t required = str->cap ? str->cap : STR_DEFAULT_BLOCKSIZE;
-    while(required < len_new) required = required << 1;
-    // make sure to have enough memory
-    if(required > str->cap)
-    {
-        char *temp = realloc(str->s, required);
-        // safety check
-        // apply address and set new allocd
-        if(!temp) return -1;
-        str->s = temp;
-        str->cap = required;
+    size_t len_new = str->last + len_app;
+    if(str_reserve(str, len_new)) {
+        return -1;
     }
     // actual append
     va_start(argp, format);
