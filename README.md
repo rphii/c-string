@@ -38,7 +38,9 @@ int main(void)
 
     printf("reserved %zu bytes [in string]\n", str_reserved(&string)); /* 32 bytes */
     str_clear(&copy);
-    printf("reserved %zu bytes after clear [in copy]\n", str_reserved(&copy)); /* 32 bytes */
+    printf("cleared string: [%.*s]\n", (int)str_length(&copy), str_iter_begin(&copy)); /* currently, this is the only thing that always guarantees a correct string output  */
+    str_fmt(&copy, "re-using those %zu byes!", str_reserved(&copy));
+    printf("string fmt after clear: %s\n", copy.s);
     str_free(&copy);
     printf("reserved %zu bytes after free [in copy]\n", str_reserved(&copy)); /* 0 bytes */
     printf("reserved %zu bytes after all above [in string]\n", str_reserved(&string)); /* 32 bytes */
