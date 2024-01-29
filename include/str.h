@@ -19,6 +19,8 @@ VEC_INCLUDE(Str, str, char, BY_VAL);
 
 int str_fmt(Str *str, char *format, ...);
 
+#define STR_F(x)    (int)str_length(x), str_iter_begin(x)
+
 #define STR_H
 #endif
 

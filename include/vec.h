@@ -226,7 +226,7 @@ typedef enum
     static inline int A##_static_shrink_back(N *vec) \
     { \
         assert(vec); \
-        size_t cap = vec->cap; \
+        size_t cap = vec->cap + VEC_KEEP_ZERO_END; \
         size_t last = vec->last; \
         size_t required = vec->cap ? vec->cap : VEC_DEFAULT_SIZE;\
         while(required > last) required /= 2; \
@@ -242,6 +242,14 @@ typedef enum
             vec->VEC_STRUCT_ITEMS = temp; \
             vec->cap = required; \
         } \
+        /* \
+        if(F != 0) { \
+            for(size_t i = 0; i < VEC_KEEP_ZERO_END; i++) { \
+                VEC_TYPE_FREE(F, &vec->VEC_STRUCT_ITEMS[vec->last + i], T); \
+            } \
+        } \
+        vec_memset(&vec->VEC_STRUCT_ITEMS[vec->last], 0, sizeof(*vec->VEC_STRUCT_ITEMS) * VEC_KEEP_ZERO_END); \
+        */ \
         return VEC_ERROR_NONE; \
     }
 
@@ -280,7 +288,7 @@ typedef enum
     static inline int A##_static_shrink_back(N *vec) \
     { \
         assert(vec); \
-        size_t cap = vec->cap; \
+        size_t cap = vec->cap + VEC_KEEP_ZERO_END; \
         size_t last = vec->last; \
         size_t required = vec->cap ? vec->cap : VEC_DEFAULT_SIZE;\
         while(required > last) required /= 2; \
