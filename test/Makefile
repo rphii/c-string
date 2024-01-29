@@ -8,8 +8,9 @@ GIT_VERSION := "$(shell git describe --abbrev=4 --dirty --always --tags)"
 CC	  := gcc
 CFLAGS  := -Wall -Wextra \
 		   -I"../include/" \
+		   -O3 -march=native -DNDEBUG \
+		   -std=c99 \
 		   #-rdynamic -pg \
-		   -O3 -march=native \
 		   #-fsanitize=address
 LDFLAGS := #-rdynamic -pg \
 		   #-fsanitize=address
@@ -40,7 +41,7 @@ endef
 define compile_job
 $2/%.o: $3/%$(CSUFFIX) Makefile | $2
 	@echo compile : $$<
-	@$$(CC) $1 -DVERSION=\"$$(GIT_VERSION)\" -c -MMD -MP -o $$(addprefix $2/,$$(notdir $$(basename $$<)).o) $$<
+	@$$(CC) $1 -DVERSION=\"$$(GIT_VERSION)\" -c -MMD -o $$(addprefix $2/,$$(notdir $$(basename $$<)).o) $$<
 endef
 
 ### CREATE BINARY FUNCTION : $(call CFLAGS,LDFLAGS,OBJ_DIR,BIN_PATH,PATH/TO/FILE.c PATH/TO/ANOTHERFILE.c)

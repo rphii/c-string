@@ -1,8 +1,16 @@
 # Things may still change
 # Very untested as of now
+- I have no time to write more tests ;\_;
 
 # c-string
-WIP... Relies on a [generic vector implementation](https://www.github.com/rphii/c-vector)
+WIP... Relies on a [generic vector implementation](https://www.github.com/rphii/c-vector).
+
+- The code is C99 (and upwards) compatible. Compiles with gcc, tcc, clang
+- The **goal** is easy to use, fast and dynamic handling of strings.
+- The **idea** is making use of a *generic vector* and expanding it to fit our needs. (*In fact,
+  there is currently only one function implemented within `str.c`, that is `str_fmt` which acts
+  similarly to how `sprintf` would. Everything else comes from `vec.h`)*
+- Clean your strings with `str_free`
 
 ## Example
 ```c
@@ -14,7 +22,7 @@ int main(void)
 
     printf("string is %s empty\n", str_empty(&string) ? "indeed" : "not");
 
-    str_fmt(&string, "Hello"); /* str_fmt always appends */
+    str_fmt(&string, "Hello"); /* str_fmt always appends... I basically only ever use this function :) */
     str_push_back(&string, ',');
     str_push_back(&string, ' ');
     str_fmt(&string, "World!");
@@ -38,8 +46,8 @@ int main(void)
 
     printf("reserved %zu bytes [in string]\n", str_reserved(&string)); /* 32 bytes */
     str_clear(&copy);
-    printf("cleared string: [%.*s]\n", (int)str_length(&copy), str_iter_begin(&copy)); /* currently, this is the only thing that always guarantees a correct string output  */
-    str_fmt(&copy, "re-using those %zu bytes!", str_reserved(&copy));
+    printf("cleared string: [%.*s]\n", STR_F(&copy)); /* !!! anytime printing anything, this is the correct way of doing so !!! (see 12 lines below; direct access to .s field may or may not be dangerous, especially if there are operations (such as pop) happening at the front of the string !!!) */
+    str_fmt(&copy, "re-using those %zu byes!", str_reserved(&copy));
     printf("string fmt after clear: %s\n", copy.s);
     str_free(&copy);
     printf("reserved %zu bytes after free [in copy]\n", str_reserved(&copy)); /* 0 bytes */
@@ -51,7 +59,7 @@ int main(void)
     str_pop_back(&string, &pop);
     printf("pop back  : %c\n", pop); /* '!' */
     printf("string after pop : %s [expected to be incorrect, mainly due to directly accessing the struct] \n", string.s); /* "HdlroW ,olle!" */
-    printf("string after pop : %.*s\n", (int)str_length(&string), str_iter_begin(&string)); /* "dlroW ,olle" */
+    printf("string after pop : %.*s [correct access]\n", STR_F(&string)); /* "dlroW ,olle" */
 
     str_shrink(&string);
     printf("string after shrink : %s\n", string.s); /* "dlroW ,olle" */
@@ -73,7 +81,6 @@ int main(void)
 ## TODO so I won't forget
 - lower
 - upper
-- str_repr
 - concat etc -> vec
 - find etc -> vec
 
