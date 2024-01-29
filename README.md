@@ -6,7 +6,7 @@
 WIP... Relies on a [generic vector implementation](https://www.github.com/rphii/c-vector).
 
 - The code is C99 (and upwards) compatible. Compiles with gcc, tcc, clang
-- The **goal** is easy to use, fast and dynamic handling of strings.
+- The **goal** is dynamically easy to use, fast, reusable and secure handling of strings.
 - The **idea** is making use of a *generic vector* and expanding it to fit our needs. (*In fact,
   there is currently only one function implemented within `str.c`, that is `str_fmt` which acts
   similarly to how `sprintf` would. Everything else comes from `vec.h`)*
